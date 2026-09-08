@@ -1,0 +1,125 @@
+/* ==========================================================================
+   Tablero Kanban, Columnas y Drag & Drop (SortableJS)
+   ========================================================================== */
+
+.board-main {
+  flex: 1;
+  padding: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.kanban-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.kanban-column {
+  background: var(--column-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 160px);
+}
+
+.column-header {
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.column-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.column-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.column-count-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.1rem 0.5rem;
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+
+.column-btn-add {
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  padding: 0.25rem;
+  border-radius: 6px;
+}
+
+.column-btn-add:hover {
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+/* --- Pista de Tarjetas --- */
+.cards-track {
+  padding: 0.75rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 120px;
+  flex: 1;
+}
+
+.column-footer-btn {
+  padding: 0.65rem;
+  margin: 0 0.75rem 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.column-footer-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--surface);
+}
+
+.column-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  color: var(--light);
+  font-size: 0.8125rem;
+  padding: 2rem 1rem;
+}
+
+/* --- SortableJS Estados --- */
+.sortable-ghost {
+  opacity: 0.4;
+  border: 2px dashed var(--primary);
+}
+
+.sortable-chosen {
+  transform: rotate(1.5deg);
+}
+
+.sortable-drag {
+  opacity: 0.95;
+  box-shadow: var(--shadow-lg);
+}

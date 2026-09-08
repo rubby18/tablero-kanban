@@ -1,0 +1,125 @@
+/* ==========================================================================
+   Barra de Estadísticas y Estado de Conexión
+   ========================================================================== */
+
+.stats-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0.5rem 1.5rem;
+  font-size: 0.8125rem;
+}
+
+.stats-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.stats-group {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.stat-total-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
+.stat-total-number {
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 0.15rem 0.55rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+}
+
+.stat-pill-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--muted);
+}
+
+.stat-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.stat-dot.todo {
+  background: var(--todo);
+}
+
+.stat-dot.doing {
+  background: var(--doing);
+}
+
+.stat-dot.done {
+  background: var(--done);
+}
+
+.stat-badge {
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 10px;
+}
+
+.stat-badge.todo {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.stat-badge.doing {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.stat-badge.done {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.rest-status {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-family: monospace;
+}
+
+.rest-indicator-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--done);
+}
+
+/* --- Banner de Error --- */
+.server-error-banner {
+  display: none;
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 0.6rem 1.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-bottom: 1px solid #fca5a5;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.server-error-banner.visible {
+  display: flex;
+}

@@ -1,0 +1,124 @@
+/* ==========================================================================
+   Tarjetas de Tareas (Cards) y Badges de Prioridad
+   ========================================================================== */
+
+/* --- Tarjeta Kanban --- */
+.task-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.85rem;
+  box-shadow: var(--shadow);
+  cursor: grab;
+  user-select: none;
+  transition: 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.task-card:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e1;
+}
+
+.task-card:active {
+  cursor: grabbing;
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-id {
+  font-size: 0.75rem;
+  font-family: monospace;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.card-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.card-desc {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.4rem;
+  border-top: 1px solid #f1f5f9;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.card-footer-item {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.card-comments-count.has-comments {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* --- Badges de Prioridad --- */
+.badge-priority {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.1rem 0.45rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+}
+
+.badge-priority-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+.badge-priority.alta {
+  background: var(--p-alta-bg);
+  color: var(--p-alta-text);
+  border-color: var(--p-alta-border);
+}
+
+.badge-priority.alta .badge-priority-dot {
+  background: var(--p-alta-text);
+}
+
+.badge-priority.media {
+  background: var(--p-media-bg);
+  color: var(--p-media-text);
+  border-color: var(--p-media-border);
+}
+
+.badge-priority.media .badge-priority-dot {
+  background: var(--p-media-text);
+}
+
+.badge-priority.baja {
+  background: var(--p-baja-bg);
+  color: var(--p-baja-text);
+  border-color: var(--p-baja-border);
+}
+
+.badge-priority.baja .badge-priority-dot {
+  background: var(--p-baja-text);
+}
