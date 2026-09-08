@@ -1,11 +1,376 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tablero Kanban</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DevFlow - Tablero Kanban</title>
+
+  <!-- Tipografía Inter y Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+
+  <!-- Estilos Estándar CSS3-->
+  <link rel="stylesheet" href="./src/css/styles.css" />
+
+  <!-- Librería Drag & Drop SortableJS -->
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 </head>
 <body>
-    
+
+  <!-- CABECERA PRINCIPAL (HEADER) -->
+  <header class="header">
+    <div class="header-container">
+      
+      <!-- Logo y Título de la Aplicación -->
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="38" height="38" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect width="40" height="40" rx="10" fill="#4F46E5" />
+            <rect x="8" y="10" width="6" height="20" rx="3" fill="#FFFFFF" fill-opacity="0.95" />
+            <rect x="17" y="10" width="6" height="14" rx="3" fill="#FFFFFF" fill-opacity="0.8" />
+            <rect x="26" y="10" width="6" height="17" rx="3" fill="#FFFFFF" fill-opacity="0.65" />
+            <circle cx="20" cy="30" r="2" fill="#38BDF8" />
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>DevFlow</h1>
+          <p>Tablero Kanban &amp; REST Client</p>
+        </div>
+      </div>
+
+      <!-- Buscador en tiempo real (Desktop) -->
+      <div class="search-wrapper">
+        <label for="search-input" class="visually-hidden" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">Buscar tarjeta</label>
+        <span class="material-symbols-outlined search-icon" aria-hidden="true">search</span>
+        <input 
+          type="search" 
+          id="search-input" 
+          class="search-input" 
+          placeholder="Buscar tarjeta por título..." 
+          aria-label="Buscar tarjeta por título"
+        />
+      </div>
+
+      <!-- Acciones de Cabecera: Botón Crear y Menú Hamburguesa -->
+      <div class="header-actions">
+        <button type="button" id="btn-open-create-modal" class="btn-primary" aria-label="Crear nueva tarea">
+          <span class="material-symbols-outlined" style="font-size: 1.15rem;" aria-hidden="true">add</span>
+          <span>Nueva Tarea</span>
+        </button>
+
+        <button type="button" id="btn-hamburger" class="btn-hamburger" aria-expanded="false" aria-label="Abrir menú de navegación móvil">
+          <span class="material-symbols-outlined" id="hamburger-icon" aria-hidden="true">menu</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Menú Desplegable Móvil (Vanilla JS) -->
+    <nav id="mobile-nav" class="mobile-nav" aria-label="Navegación móvil">
+      <div class="search-wrapper" style="max-width: 100%; display: flex;">
+        <span class="material-symbols-outlined search-icon" aria-hidden="true">search</span>
+        <input 
+          type="search" 
+          id="mobile-search-input" 
+          class="search-input" 
+          placeholder="Buscar tarjeta por título..." 
+          aria-label="Buscar tarjeta por título en móvil"
+        />
+      </div>
+      <div class="mobile-tabs" role="tablist">
+        <button type="button" class="mobile-tab-btn active" data-target="all" role="tab">Todas</button>
+        <button type="button" class="mobile-tab-btn" data-target="col-todo" role="tab">Por Hacer</button>
+        <button type="button" class="mobile-tab-btn" data-target="col-doing" role="tab">En Proceso</button>
+        <button type="button" class="mobile-tab-btn" data-target="col-done" role="tab">Finalizado</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- PANEL DE ESTADÍSTICAS RÁPIDAS -->
+  <section class="stats-bar" aria-label="Estadísticas de tareas y estado de API">
+    <div class="stats-container">
+      <div class="stats-group">
+        <div class="stat-total-wrapper">
+          <span class="stat-total-number" id="stat-total">0</span>
+          <span class="stat-total-label">Tareas en total</span>
+        </div>
+        <div class="stat-pill-item">
+          <span class="stat-dot todo" aria-hidden="true"></span>
+          <span>Por Hacer:</span>
+          <span class="stat-badge todo" id="stat-todo">0</span>
+        </div>
+        <div class="stat-pill-item">
+          <span class="stat-dot doing" aria-hidden="true"></span>
+          <span>En Proceso:</span>
+          <span class="stat-badge doing" id="stat-doing">0</span>
+        </div>
+        <div class="stat-pill-item">
+          <span class="stat-dot done" aria-hidden="true"></span>
+          <span>Finalizado:</span>
+          <span class="stat-badge done" id="stat-done">0</span>
+        </div>
+      </div>
+
+      <!-- Indicador de llamada REST API Mock -->
+      <div class="rest-status" title="Estado de la conexión REST con json-server">
+        <span class="rest-indicator-dot" aria-hidden="true"></span>
+        <span>REST API Mock:</span>
+        <span id="api-status-tag" class="rest-endpoint-text">GET /tasks 200 OK</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOTIFICACIÓN DE ERROR DEL SERVIDOR (Requirement 19) -->
+  <div id="server-error-banner" class="server-error-banner" role="alert">
+    <span class="material-symbols-outlined" style="font-size: 1.15rem;" aria-hidden="true">cloud_off</span>
+    <span id="server-error-text">No se ha podido conectar con el servidor.</span>
+  </div>
+
+  <!-- TABLERO KANBAN (MAIN) -->
+  <main class="board-main">
+    <div class="kanban-grid" id="board-container">
+
+      <!-- COLUMNA 1: POR HACER (status: "todo") -->
+      <section class="kanban-column" id="col-todo" aria-label="Columna Por Hacer">
+        <header class="column-header">
+          <div class="column-title-group">
+            <span class="stat-dot todo" aria-hidden="true"></span>
+            <h2 class="column-title">Por Hacer</h2>
+            <span class="column-count-badge todo" id="col-count-todo">0</span>
+          </div>
+          <button type="button" class="column-btn-add" data-action="add-task" data-status="todo" aria-label="Añadir tarjeta a Por Hacer">
+            <span class="material-symbols-outlined" style="font-size: 1.15rem;" aria-hidden="true">add</span>
+          </button>
+        </header>
+
+        <!-- Pista de soltado conectada con SortableJS -->
+        <div class="cards-track" id="track-todo" data-status="todo">
+          <!-- Tarjetas renderizadas dinámicamente -->
+        </div>
+
+        <button type="button" class="column-footer-btn" data-action="add-task" data-status="todo">
+          <span class="material-symbols-outlined" style="font-size: 1.1rem;" aria-hidden="true">add</span>
+          <span>Añadir tarea</span>
+        </button>
+      </section>
+
+      <!-- COLUMNA 2: EN PROCESO (status: "doing") -->
+      <section class="kanban-column" id="col-doing" aria-label="Columna En Proceso">
+        <header class="column-header">
+          <div class="column-title-group">
+            <span class="stat-dot doing" aria-hidden="true"></span>
+            <h2 class="column-title">En Proceso</h2>
+            <span class="column-count-badge doing" id="col-count-doing">0</span>
+          </div>
+        </header>
+
+        <!-- Pista de soltado conectada con SortableJS -->
+        <div class="cards-track" id="track-doing" data-status="doing">
+          <!-- Tarjetas renderizadas dinámicamente -->
+        </div>
+      </section>
+
+      <!-- COLUMNA 3: FINALIZADO (status: "done") -->
+      <section class="kanban-column" id="col-done" aria-label="Columna Finalizado">
+        <header class="column-header">
+          <div class="column-title-group">
+            <span class="stat-dot done" aria-hidden="true"></span>
+            <h2 class="column-title">Finalizado</h2>
+            <span class="column-count-badge done" id="col-count-done">0</span>
+          </div>
+        </header>
+
+        <!-- Pista de soltado conectada con SortableJS -->
+        <div class="cards-track" id="track-done" data-status="done">
+          <!-- Tarjetas renderizadas dinámicamente -->
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- MODAL: CREAR NUEVA TAREA (POST /tasks) -->
+  <div class="modal-backdrop" id="modal-create" role="dialog" aria-modal="true" aria-labelledby="modal-create-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="material-symbols-outlined" style="color: var(--color-primary); font-size: 1.25rem;" aria-hidden="true">add_task</span>
+          <h2 class="modal-title" id="modal-create-title">Nueva Tarea</h2>
+        </div>
+        <button type="button" class="modal-close-btn" data-close-modal="modal-create" aria-label="Cerrar ventana modal">
+          <span class="material-symbols-outlined" aria-hidden="true">close</span>
+        </button>
+      </div>
+
+      <form id="form-create-task">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="create-title" class="form-label">Título *</label>
+            <input 
+              type="text" 
+              id="create-title" 
+              class="form-input" 
+              placeholder="Ej: Diseñar flujo de autenticación" 
+              required 
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="create-description" class="form-label">Descripción</label>
+            <textarea 
+              id="create-description" 
+              class="form-textarea" 
+              rows="3" 
+              placeholder="Detalles, objetivos o requisitos de la tarea..."
+            ></textarea>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="create-priority" class="form-label">Prioridad</label>
+              <select id="create-priority" class="form-select">
+                <option value="Alta">Alta</option>
+                <option value="Media" selected>Media</option>
+                <option value="Baja">Baja</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="create-duedate" class="form-label">Fecha Límite</label>
+              <input type="date" id="create-duedate" class="form-input" />
+            </div>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-close-modal="modal-create">Cancelar</button>
+          <button type="submit" class="btn-primary">
+            <span class="material-symbols-outlined" style="font-size: 1.1rem;" aria-hidden="true">save</span>
+            <span>Guardar Tarea</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: DETALLE, EDICIÓN Y COMENTARIOS (GET /tasks/:id, PATCH /tasks/:id, DELETE /tasks/:id) -->
+  <div class="modal-backdrop" id="modal-detail" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+    <div class="modal-box" style="max-width: 580px;">
+      
+      <!-- Cabecera de Detalle con Badge y Acciones -->
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span id="detail-id-badge" style="font-family: monospace; font-size: 0.8125rem; font-weight: 700; background: #e2e8f0; padding: 0.15rem 0.5rem; border-radius: 4px;">#1</span>
+          <div id="detail-priority-badge-container">
+            <!-- Renderizado dinámico del badge de prioridad -->
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <button type="button" id="btn-delete-task" class="btn-danger" title="Eliminar tarea (DELETE /tasks/:id)" aria-label="Eliminar tarea">
+            <span class="material-symbols-outlined" style="font-size: 1.15rem;" aria-hidden="true">delete</span>
+          </button>
+          <button type="button" class="modal-close-btn" data-close-modal="modal-detail" aria-label="Cerrar ventana de detalle">
+            <span class="material-symbols-outlined" aria-hidden="true">close</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        
+        <!-- Formulario de Edición de Tarea (PATCH /tasks/:id) -->
+        <div class="form-group">
+          <label for="detail-title" class="form-label">Título de la Tarea</label>
+          <input type="text" id="detail-title" class="form-input" style="font-weight: 600;" required />
+        </div>
+
+        <div class="form-group">
+          <label for="detail-description" class="form-label">Descripción</label>
+          <textarea id="detail-description" class="form-textarea" rows="3"></textarea>
+        </div>
+
+        <div class="form-row-3">
+          <div class="form-group">
+            <label for="detail-status" class="form-label">Estado</label>
+            <select id="detail-status" class="form-select">
+              <option value="todo">Por Hacer</option>
+              <option value="doing">En Proceso</option>
+              <option value="done">Finalizado</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="detail-priority" class="form-label">Prioridad</label>
+            <select id="detail-priority" class="form-select">
+              <option value="Alta">Alta</option>
+              <option value="Media">Media</option>
+              <option value="Baja">Baja</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="detail-duedate" class="form-label">Fecha Límite</label>
+            <input type="date" id="detail-duedate" class="form-input" />
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; padding-top: 0.25rem;">
+          <button type="button" id="btn-save-detail" class="btn-primary" style="font-size: 0.8125rem;">
+            <span class="material-symbols-outlined" style="font-size: 1.1rem;" aria-hidden="true">check</span>
+            <span>Guardar Cambios</span>
+          </button>
+        </div>
+
+        <!-- SECCIÓN DE COMENTARIOS (GET /comments?taskId=:id & POST /comments) -->
+        <section class="comments-section" aria-label="Comentarios de la tarea">
+          <div class="comments-header">
+            <h3 class="comments-title">
+              <span class="material-symbols-outlined" style="font-size: 1.1rem;" aria-hidden="true">forum</span>
+              <span>Comentarios (<span id="detail-comments-count">0</span>)</span>
+            </h3>
+          </div>
+
+          <!-- Lista de Comentarios -->
+          <div id="detail-comments-list" class="comments-list" tabindex="0" aria-label="Lista de comentarios">
+            <!-- Comentarios inyectados dinámicamente -->
+          </div>
+
+          <!-- Formulario para Añadir Comentario -->
+          <form id="form-new-comment" class="form-comment">
+            <div class="form-group">
+              <label for="comment-author" class="form-label">Tu Nombre</label>
+              <input 
+                type="text" 
+                id="comment-author" 
+                class="form-input" 
+                placeholder="Ej: Carlos Ruiz" 
+                required 
+              />
+            </div>
+            <div class="form-group">
+              <label for="comment-text" class="form-label">Comentario</label>
+              <textarea 
+                id="comment-text" 
+                class="form-textarea" 
+                rows="2" 
+                placeholder="Escribe una actualización o nota sobre esta tarea..." 
+                required
+              ></textarea>
+            </div>
+            <div class="comment-submit-row">
+              <button type="submit" class="btn-comment-submit">
+                <span class="material-symbols-outlined" style="font-size: 1rem;" aria-hidden="true">send</span>
+                <span>Comentar</span>
+              </button>
+            </div>
+          </form>
+        </section>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Script Principal de la Aplicación -->
+  <script type="module" src="./src/js/app.js"></script>
 </body>
 </html>
