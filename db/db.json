@@ -1,0 +1,53 @@
+{
+  "tasks": [
+    {
+      "id": "1a",
+      "title": "Diseñar maqueta en Figma",
+      "description": "Crear los wireframes y prototipos interactivos del tablero.",
+      "priority": "Alta",
+      "dueDate": "2026-09-15",
+      "status": "todo"
+    },
+    {
+      "id": "2a",
+      "title": "Configurar json-server",
+      "description": "Iniciar la API simulada con las colecciones de tareas y comentarios.",
+      "priority": "Media",
+      "dueDate": "2026-09-10",
+      "status": "todo"
+    },
+    {
+      "id": "3a",
+      "title": "Implementar Drag & Drop SortableJS",
+      "description": "Permitir mover tarjetas entre columnas con actualización PATCH inmediata.",
+      "priority": "Alta",
+      "dueDate": "2026-09-18",
+      "status": "doing"
+    },
+    {
+      "id": "4a",
+      "title": "Maquetar vista responsive",
+      "description": "Garantizar adaptación perfecta en mobile y desktop con menú hamburguesa.",
+      "priority": "Baja",
+      "dueDate": "2026-09-08",
+      "status": "done"
+    }
+  ],
+  "comments": [
+    {
+      "id": "101",
+      "taskId": "1a",
+      "author": "Ana Gómez",
+      "text": "Recuerda incluir los estados de hover en los botones del modal.",
+      "createdAt": "2026-09-06T10:30:00Z"
+    },
+    {
+      "id": "102",
+      "taskId": "1a",
+      "author": "Carlos Ruiz",
+      "text": "Ya subí la paleta de colores al canal de Figma.",
+      "createdAt": "2026-09-06T11:15:00Z"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
